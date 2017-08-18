@@ -51,8 +51,8 @@ func (v *Validator) HasErrors() bool {
 }
 
 func (v *Validator) getField(name string) (reflect.Type, reflect.Value) {
-	fieldType 	:= reflect.ValueOf(v.Entity).FieldByName(name).Type()
-	fieldValue 	:= reflect.ValueOf(v.Entity).FieldByName(name)
+	fieldType 	:= reflect.ValueOf(v.Entity).Elem().FieldByName(name).Type()
+	fieldValue 	:= reflect.ValueOf(v.Entity).Elem().FieldByName(name)
 
 	return fieldType, fieldValue;
 }
