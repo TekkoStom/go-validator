@@ -40,3 +40,13 @@ func (v *Validator) Length(field string, from int, to int) *Validator {
 
 	return v
 }
+
+func (v *Validator) HasErrors() bool {
+	initValidator(v)
+
+	if len(v.ValidationErrors) == 0 {
+		return false
+	}
+
+	return true
+}
