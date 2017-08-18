@@ -20,10 +20,9 @@ func initValidator(v *Validator) {
 func (v *Validator) Required(field string) *Validator {
 	initValidator(v)
 
-	fieldType 	:= reflect.ValueOf(v.Entity).FieldByName(field).Type().String()
-	fieldValue 	:= reflect.ValueOf(v.Entity).FieldByName(field)
+	fieldType, fieldValue := v.getField(field)
 
-	switch fieldType {
+	switch fieldType.String() {
 	case "string":
 		v.ValidationErrors = str.Required(field, fieldValue.String(), v.ValidationErrors)
 	}
@@ -34,7 +33,7 @@ func (v *Validator) Required(field string) *Validator {
 func (v *Validator) Length(field string, from int, to int) *Validator {
 	initValidator(v)
 
-	fieldValue := reflect.ValueOf(v.Entity).FieldByName(field)
+	fieldValue, _ := v.getField(field)
 
 	v.ValidationErrors = str.Length(field, fieldValue.String(), from, to, v.ValidationErrors)
 
@@ -49,4 +48,11 @@ func (v *Validator) HasErrors() bool {
 	}
 
 	return true
+}
+
+func (v *Validator) getField(name string) (reflect.Type, reflect.Value) {
+	fieldType 	:= reflect.ValueOf(v.Entity).FieldByName(name).Type()
+	fieldValue 	:= reflect.ValueOf(v.Entity).FieldByName(name)
+
+	return fieldType, fieldValue;
 }
