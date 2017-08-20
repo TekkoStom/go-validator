@@ -5,33 +5,11 @@ import "testing"
 func TestValidator_Required(t *testing.T) {
 	test := TestStruct{}
 
-	validator := Validator{Entity: test}
-	validator.Required("Name")
+	validator := InitValidator(test)
 
-	if len(validator.ValidationErrors["Name"]) < 1 {
-		t.Error("Required")
-	}
-}
-
-func TestValidator_HasErrors(t *testing.T) {
-	test := TestStruct{}
-
-	validator := Validator{Entity: test}
-	validator.Required("Name")
-
-	if !validator.HasErrors() {
-		t.Error("Should not return false")
-	}
-}
-
-func TestValidator_HasNotErrors(t *testing.T) {
-	test := TestStruct{}
-
-	validator := Validator{Entity: test}
-
-	if validator.HasErrors() {
-		t.Error("Should not return true")
-	}
+	validator.Property("Name").
+		Required().
+		Length(0, 255)
 }
 
 type TestStruct struct {

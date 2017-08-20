@@ -11,38 +11,42 @@ type Validator struct {
 	ValidationErrors map[string][]string
 }
 
-func initValidator(v *Validator) {
-	if v.ValidationErrors == nil {
-		v.ValidationErrors = make(map[string][]string)
-	}
+var v *Validator
+var prop string
+
+func InitValidator(entity interface{}) *Validator {
+	v.Entity 			= entity
+	v.ValidationErrors 	= make(map[string][]string)
+
+	return v
 }
 
-func (v *Validator) Required(field string) *Validator {
-	initValidator(v)
+func (v *Validator) Property(property string) *Validator {
+	prop = property
 
-	fieldType, fieldValue := v.getField(field)
+	return v
+}
+
+func (v *Validator) Required() *Validator {
+	fieldType, fieldValue := v.getField()
 
 	switch fieldType.String() {
 	case "string":
-		v.ValidationErrors = str.Required(field, fieldValue.String(), v.ValidationErrors)
+		v.ValidationErrors = str.Required(prop, fieldValue.String(), v.ValidationErrors)
 	}
 
 	return v
 }
 
-func (v *Validator) Length(field string, from int, to int) *Validator {
-	initValidator(v)
+func (v *Validator) Length(from int, to int) *Validator {
+	fieldValue, _ := v.getField()
 
-	fieldValue, _ := v.getField(field)
-
-	v.ValidationErrors = str.Length(field, fieldValue.String(), from, to, v.ValidationErrors)
+	v.ValidationErrors = str.Length(prop, fieldValue.String(), from, to, v.ValidationErrors)
 
 	return v
 }
 
 func (v *Validator) HasErrors() bool {
-	initValidator(v)
-
 	if len(v.ValidationErrors) == 0 {
 		return false
 	}
@@ -50,9 +54,9 @@ func (v *Validator) HasErrors() bool {
 	return true
 }
 
-func (v *Validator) getField(name string) (reflect.Type, reflect.Value) {
-	fieldType 	:= reflect.ValueOf(v.Entity).Elem().FieldByName(name).Type()
-	fieldValue 	:= reflect.ValueOf(v.Entity).Elem().FieldByName(name)
+func (v *Validator) getField() (reflect.Type, reflect.Value) {
+	fieldType 	:= reflect.ValueOf(v.Entity).Elem().FieldByName(prop).Type()
+	fieldValue 	:= reflect.ValueOf(v.Entity).Elem().FieldByName(prop)
 
 	return fieldType, fieldValue;
 }
