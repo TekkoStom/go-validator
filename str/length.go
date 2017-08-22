@@ -1,15 +1,25 @@
 package str
 
-import "fmt"
-
-func Length(field string, value string, from int, to int, error map[string][]string) map[string][]string {
-	if len(value) < from {
-		error[field] = append(error[field], fmt.Sprintf("length.from[%v]", from))
+func Length(field string, value string, from int, to int, errors map[string][]string, err string) map[string][]string {
+	if len(value) < from || len(value) > to {
+		errors[field] = append(errors[field], err)
 	}
 
-	if len(value) > to {
-		error[field] = append(error[field], fmt.Sprintf("length.to[%v]", to))
+	return errors
+}
+
+func Max(field string, value string, max int, errors map[string][]string, err string) map[string][]string {
+	if len(value) > max {
+		errors[field] = append(errors[field], err)
 	}
 
-	return error
+	return errors
+}
+
+func Min(field string, value string, min int, errors map[string][]string, err string) map[string][]string {
+	if len(value) < min {
+		errors[field] = append(errors[field], err)
+	}
+
+	return errors
 }

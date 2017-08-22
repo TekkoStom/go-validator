@@ -1,9 +1,9 @@
 package str
 
-func Required(field string, value string, error map[string][]string) map[string][]string {
+func Required(field string, value string, errors map[string][]string, err string) map[string][]string {
 	if value == "" {
-		error[field] = append(error[field], "required")
+		errors[field] = append(errors[field], err)
 	}
 
-	return error
+	return errors
 }
