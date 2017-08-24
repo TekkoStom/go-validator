@@ -60,6 +60,14 @@ func (v *Validator) Max(max int, err ...string) *Validator {
 	return v
 }
 
+func (v *Validator) ValidUUID(err ...string) *Validator {
+	fieldValue, _ := v.getField()
+
+	v.ValidationErrors = str.ValidUUID(prop, fieldValue.String(), v.ValidationErrors, err[0])
+
+	return v
+}
+
 func (v *Validator) HasErrors() bool {
 	if len(v.ValidationErrors) == 0 {
 		return false
