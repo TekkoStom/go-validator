@@ -45,7 +45,7 @@ func (v *Validator) Required(err ...string) *Validator {
 }
 
 func (v *Validator) Length(from int, to int, err ...string) *Validator {
-	fieldValue, _ := v.getField()
+	_, fieldValue := v.getField()
 
 	v.ValidationErrors = str.Length(prop, fieldValue.String(), from, to, v.ValidationErrors, err[0])
 
@@ -53,7 +53,7 @@ func (v *Validator) Length(from int, to int, err ...string) *Validator {
 }
 
 func (v *Validator) Max(max int, err ...string) *Validator {
-	fieldValue, _ := v.getField()
+	_, fieldValue := v.getField()
 
 	v.ValidationErrors = str.Max(prop, fieldValue.String(), max, v.ValidationErrors, err[0])
 
@@ -61,7 +61,7 @@ func (v *Validator) Max(max int, err ...string) *Validator {
 }
 
 func (v *Validator) ValidUUID(err ...string) *Validator {
-	fieldValue, _ := v.getField()
+	_, fieldValue := v.getField()
 
 	v.ValidationErrors = str.ValidUUID(prop, fieldValue.String(), v.ValidationErrors, err[0])
 
