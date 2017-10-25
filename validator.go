@@ -68,6 +68,15 @@ func (v *Validator) ValidUUID(err ...string) *Validator {
 	return v
 }
 
+func (v *Validator) In(values []string, err ...string) *Validator {
+	_, fieldValue := v.getField()
+
+	v.ValidationErrors = str.In(prop, fieldValue.String(), values, v.ValidationErrors, err[0])
+
+	return v
+}
+
+
 func (v *Validator) HasErrors() bool {
 	if len(v.ValidationErrors) == 0 {
 		return false
